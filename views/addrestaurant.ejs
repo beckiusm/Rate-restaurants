@@ -1,0 +1,13 @@
+<% include ("partials/header.ejs") %>
+
+<form action="/addRestaurant" method="POST">
+    <input id="name" name="name" placeholder="Name">
+    <input id="address" name="address" placeholder="Address">
+    <input id="zipcode" name="zipcode" placeholder="Zipcode">
+    <input id="streetnumber" name="street_number" placeholder="Street number">
+    <input id="borough" name="borough" placeholder="Borough">
+    <input id="cuisine" name="cuisine" placeholder="Cuisine">
+    <button type="submit">Submit</button>
+</form>
+
+<% include ("partials/footer.ejs") %>
