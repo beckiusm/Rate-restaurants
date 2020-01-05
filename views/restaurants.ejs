@@ -1,8 +1,8 @@
-<% include ("partials/header.ejs") %>
+<%- include ("partials/header.ejs") %>
 
-<div id="content">
-    <h1>Restaurants</h1>
-    <table>
+<h1>Restaurants</h1>
+<table class="table">
+    <thead>
         <tr>
             <th>Name</th>
             <th>Address</th>
@@ -11,17 +11,20 @@
             <th>Borough</th>
             <th>Cuisine</th>
         </tr>
-    <% for (let i = 0; i < data.length; i++) { %>
-        <tr>
-            <td><%= data[i].name %></td>
-            <td><%= data[i].address %></td>
-            <td><%= data[i].zipcode %></td>
-            <td><%= data[i].street_number %></td>
-            <td><%= data[i].borough %></td>
-            <td><%= data[i].cuisine %></td>
-        </tr>
-    <% } %>
-        </table>
-</div>
+    </thead>
+    <tbody>
+<% for (let i = 0; i < data.length; i++) { %>
+    <tr>
+        <td><%= data[i].name %></td>
+        <td><%= data[i].address %></td>
+        <td><%= data[i].zipcode %></td>
+        <td><%= data[i].street_number %></td>
+        <td><%= data[i].borough %></td>
+        <td><%= data[i].cuisine %></td>
+    </tr>
+<% } %>
+    </tbody>
+</table>
 
-<% include ("partials/footer.ejs") %>
+
+<%- include ("partials/footer.ejs") %>

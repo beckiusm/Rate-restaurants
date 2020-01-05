@@ -1,13 +1,31 @@
-<% include ("partials/header.ejs") %>
-
+<%- include ("partials/header.ejs") %>
+<h1>Add restaurants</h1>
 <form action="/addRestaurant" method="POST">
-    <input id="name" name="name" placeholder="Name">
-    <input id="address" name="address" placeholder="Address">
-    <input id="zipcode" name="zipcode" placeholder="Zipcode">
-    <input id="streetnumber" name="street_number" placeholder="Street number">
-    <input id="borough" name="borough" placeholder="Borough">
-    <input id="cuisine" name="cuisine" placeholder="Cuisine">
-    <button type="submit">Submit</button>
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input class="form-control"id="name" name="name" placeholder="Name" required>
+    </div>
+    <div class="form-group">
+        <label for="address">Address</label>
+        <input class="form-control"id="address" name="address" placeholder="Address" required>
+    </div>
+    <div class="form-group">
+        <label for="zipcode">Zip code</label>
+        <input class="form-control"id="zipcode" name="zipcode" placeholder="Zipcode" required>
+    </div>
+    <div class="form-group">
+        <label for="strret_number">Street number</label>
+        <input class="form-control" id="street_number" name="street_number" placeholder="Street number" required>
+    </div>
+    <div class="form-group">
+        <label for="borough">Borough</label>
+        <input class="form-control"id="borough" name="borough" placeholder="Borough" required>
+    </div>
+    <div class="form-group">
+        <label for="cuisine">Cuisine</label>
+        <input class="form-control"id="cuisine" name="cuisine" placeholder="Cuisine" required>
+    </div>
+    <button class="btn btn-primary" type="submit">Submit</button>
 </form>
 
-<% include ("partials/footer.ejs") %>
+<%- include ("partials/footer.ejs") %>

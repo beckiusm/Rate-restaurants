@@ -1,0 +1,12 @@
+<%- include ("header.ejs") %>
+
+<form action="/addReview" method="POST">
+    <div class="form-group">
+        <textarea class="form-control" id="review" name="review" rows="5" placeholder="Write a review..."></textarea>
+    </div>
+    <input id="reviewScore" type="number" class="d-none">
+    <div id="rateRestaurant" class="rateit" data-rateit-resetable="false" data-rateit-mode="font">
+    </div>
+</form>
+
+<%- include ("footer") %>
