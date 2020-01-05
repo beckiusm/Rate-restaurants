@@ -1,0 +1,17 @@
+<%- include ("partials/header.ejs") %>
+
+<h1><%= restaurant[0].name %></h1>
+
+<div class="rateit" data-rateit-value="<%= restaurant[0].avg_score %>" data-rateit-ispreset="true"
+    data-rateit-readonly="true"></div>
+
+<h5><%= restaurant[0].address %>, <%= restaurant[0].street_number %>, <%= restaurant[0].zipcode %>,
+    <%= restaurant[0].borough %></h5>
+<p><%= restaurant[0].cuisine %></p>
+<img id="banner" src="/images/<%=restaurant[0].cuisine%>/<%= randomImage %>">
+
+
+<%- include ("partials/review.ejs") %>
+
+
+<%- include ("partials/footer.ejs") %>
