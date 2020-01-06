@@ -10,7 +10,6 @@ const exjwt = require("express-jwt");
 const cookieParser = require("cookie-parser");
 const flash = require("express-flash");
 const session = require("express-session");
-const accesscontrol = require("accesscontrol");
 const favicon = require("express-favicon");
 require('dotenv').config({
     path: __dirname + '/.env'
@@ -49,22 +48,10 @@ app.use(favicon(__dirname + "/public/images/star.png"));
 app.use(exjwt({
     secret: process.env.SECRET,
     credentialsRequired: false,
-    getToken: function fromHeaderOrQuerystring(req) {
+    getToken: (req) => {
         return req.cookies.token;
     }
 }));
-
-/* ACCESS CONTROL */
-
-const ac = new accesscontrol();
-ac.grant("none");
-ac.grant("user")
-    .createOwn("review")
-    .grant("admin")
-    .extend("user")
-    .createAny("restaurant")
-    .deleteAny("restaurant")
-    .updateAny("restaurant");
 
 /* VIEW ENGINE */
 
@@ -72,6 +59,63 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 /* ROUTES */
+
+app.get("/", (req, res) => {
+    db.query(`SELECT r.id, r.name, r.cuisine, AVG(rw.score) AS avg_score FROM restaurants r 
+        LEFT JOIN reviews rw ON r.id = rw.restaurant_id  GROUP BY r.name HAVING avg_score > 0 ORDER BY avg_score DESC LIMIT 10 ; 
+        SELECT DISTINCT cuisine from restaurants`, (err, data) => {
+        res.render("index", {
+            avg: data[0],
+            cuisine: data[1],
+            user: req.user
+        });
+        res.status(200);
+    });
+});
+
+app.get("/restaurants/:id?", (req, res) => {
+    if (req.query.cuisine) { // cuisine paramter
+        db.query("SELECT * FROM restaurants WHERE cuisine = ?", [req.query.cuisine], (err, data) => {
+            res.render("restaurants", {
+                data,
+                user: req.user
+            });
+            res.status(200);
+        });
+    } else if (!req.params.id) { // no parameters
+        db.query("SELECT * FROM restaurants LIMIT 300", (err, data) => {
+            res.render("restaurants", {
+                data,
+                user: req.user
+            });
+            res.status(200);
+        });
+    } else { // with id paraeter
+        db.query(`SELECT r.id, r.name, r.address, r.zipcode, r.street_number, r.borough, r.cuisine, rw.text, rw.score as score, 
+                (select avg(score) from reviews where restaurant_id = ?) as avg_score FROM restaurants r LEFT JOIN reviews rw ON r.id = rw.restaurant_id WHERE r.id = ?`, [req.params.id, req.params.id], (err, restaurant) => {
+            res.render("restaurant.ejs", {
+                restaurant,
+                user: req.user
+            });
+        });
+    }
+});
+
+app.get("/admin", (req, res) => {
+    if (!req.user || req.user.role !== "admin") {
+        res.send("Not authorized");
+    } else if (req.user.role === "admin") {
+        res.render("addrestaurant", {user: req.user});
+    }
+});
+
+app.get("/login", (req, res) => {
+    res.render("login", {user: req.user});
+});
+
+app.get("/register", (req, res) => {
+    res.render("register", {user: req.user});
+});
 
 app.get("/rating", (req, res) => {
     res.sendFile(__dirname + "/node_modules/jquery.rateit/scripts");
@@ -83,75 +127,9 @@ app.get("/randomImage/:cuisine", (req, res) => { // returns random image of cuis
     res.sendFile(__dirname + `/public/images/${req.params.cuisine}/${randomImage}`);
 });
 
-app.get("/", (req, res) => {
-    db.query(`SELECT r.id, r.name, r.cuisine, AVG(rw.score) AS avg_score FROM restaurants r 
-        LEFT JOIN reviews rw ON r.id = rw.restaurant_id  GROUP BY r.name HAVING avg_score > 0 ORDER BY avg_score DESC LIMIT 10 ; 
-        SELECT DISTINCT cuisine from restaurants`, (err, data) => {
-        res.render("index", {
-            avg: data[0],
-            cuisine: data[1]
-        });
-        res.status(200);
-    });
-});
-
-app.get("/admin", (req, res) => {
-    if (!req.user || req.user.role !== "admin") {
-        res.send("Not authorized");
-    } else if (req.user.role === "admin") {
-        res.render("addrestaurant");
-    }
-});
-
-app.get("/login", (req, res) => {
-    res.render("login");
-});
-
-app.get("/register", (req, res) => {
-    res.render("register");
-});
-
-app.get("/review", (req, res) => {
-    res.render("partials/review");
-});
-
 app.get("/logout", (req, res) => {
     res.clearCookie("token");
     res.redirect("/");
-});
-
-app.get("/hejsan", (req, res) => { // testing
-    db.query("SELECT r.id, r.name, r.address, r.zipcode, r.street_number, r.borough, r.cuisine, rw.text FROM restaurants r LEFT JOIN reviews rw ON rw.text IS NOT NULL AND r.id = rw.restaurant_id WHERE r.id = ?; select avg(score) from reviews where restaurant_id = 4507", ["4507"], (err, result) => {
-        console.log(result);
-        res.json(result);
-    })
-})
-
-app.get("/restaurants/:id?", (req, res) => {
-    let user = req.user;
-    if (req.query.cuisine) { // cuisine paramter
-        db.query("SELECT * FROM restaurants WHERE cuisine = ?", [req.query.cuisine], (err, data) => {
-            res.render("restaurants", {
-                data
-            });
-            res.status(200);
-        });
-    } else if (!req.params.id) { // no parameters
-        db.query("SELECT * FROM restaurants LIMIT 300", (err, data) => {
-            res.render("restaurants", {
-                data
-            });
-            res.status(200);
-        });
-    } else { // with id paraeter
-        db.query(`SELECT r.id, r.name, r.address, r.zipcode, r.street_number, r.borough, r.cuisine, rw.text, rw.score as score, 
-                (select avg(score) from reviews where restaurant_id = ?) as avg_score FROM restaurants r LEFT JOIN reviews rw ON r.id = rw.restaurant_id WHERE r.id = ?`, [req.params.id, req.params.id], (err, restaurant) => {
-            res.render("restaurant.ejs", {
-                restaurant,
-                user
-            });
-        });
-    }
 });
 
 /* POST REQUESTS */

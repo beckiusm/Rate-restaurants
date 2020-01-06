@@ -29,6 +29,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/restaurants">Restaurants</a>
                 </li>
+                <% if (!user || user.role !== "admin") {
+
+                } else {%>
+            </ul>
+            <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="/admin">Admin</a>
                 </li>
@@ -36,6 +41,7 @@
                     <a id="login" class="nav-link" href="/logout">Logout</a>
                 </li>
             </ul>
+            <% } %>
         </div>
     </nav>
     <div class="container">
