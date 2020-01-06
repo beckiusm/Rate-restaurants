@@ -1,11 +1,14 @@
-$("#rateRestaurant").bind('rated', function (event, value) {
-    console.log(value);
-    $('#reviewScore').val(value);
+$("table").DataTable({
+    "responsive": true
 });
 
-$("table").DataTable();
-
-$(document).on("click", "table td", (event) => {
-    let id = $(event.target).parent().attr("id");
+$(document).on("click", "table td", (event) => { // go to restaurant when clicking table row
+    let id = $(event.target).parent().prop("id");
     location.href = "/restaurants/" + id;
 });
+
+if (document.cookie.indexOf("token") === -1) { //
+    console.log("ingen kaka");
+    $("#login").text("Login");
+    $("#login").attr("href", "/login");
+}

@@ -2,16 +2,29 @@
 
 <h1><%= restaurant[0].name %></h1>
 
-<div class="rateit" data-rateit-value="<%= restaurant[0].avg_score %>" data-rateit-ispreset="true"
-    data-rateit-readonly="true"></div>
+<div id="avgScore" class="rateit" data-rateit-value="<%= restaurant[0].avg_score %>" data-rateit-ispreset="true"
+    data-rateit-readonly="true" data-rateit-mode="font"></div>
 
-<h5><%= restaurant[0].address %>, <%= restaurant[0].street_number %>, <%= restaurant[0].zipcode %>,
-    <%= restaurant[0].borough %></h5>
+<h5><%= restaurant[0].address %>
+    <%= restaurant[0].street_number %>, 
+    <%= restaurant[0].zipcode %>,
+    <%= restaurant[0].borough %>
+</h5>
 <p><%= restaurant[0].cuisine %></p>
-<img id="banner" src="/images/<%=restaurant[0].cuisine%>/<%= randomImage %>">
+<img id="banner" src="/randomImage/<%=restaurant[0].cuisine%>">
 
+<div id="reviews" class="mt-3">
+    <% for (let i=0; i<restaurant.length; i++) { 
+        if (restaurant[i].text) { %>
+    <div class="review border rounded-sm pt-1 px-2 pb-3 mb-3">
+        <div class="rateit" data-rateit-value="<%= restaurant[i].score %>" data-rateit-ispreset="true"
+            data-rateit-readonly="true" data-rateit-mode="font"></div>
+        <p><%= restaurant[i].text %></p>
+    </div>
+    <% }} %>
+</div>
 
-<%- include ("partials/review.ejs") %>
-
+<% if (permission) { %> <%- include ("partials/review.ejs") %> <% } else { %>
+<a href="/login">Login to write a review</a> <% } %>
 
 <%- include ("partials/footer.ejs") %>

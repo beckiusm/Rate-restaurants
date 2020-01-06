@@ -1,30 +1,48 @@
 <%- include ("partials/header.ejs") %>
 
-<h1>Restaurants</h1>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Address</th>
-            <th>Zipcode</th>
-            <th>Street number</th>
-            <th>Borough</th>
-            <th>Cuisine</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% for (let i = 0; i < data.length; i++) { %>
-        <tr id="<%= data[i].id %>">
-            <td><%= data[i].name %></td>
-            <td><%= data[i].address %></td>
-            <td><%= data[i].zipcode %></td>
-            <td><%= data[i].street_number %></td>
-            <td><%= data[i].borough %></td>
-            <td><%= data[i].cuisine %></td>
-        </tr>
-        <% } %>
-    </tbody>
-</table>
+<h1>Top restaurants</h1>
+<div class="row mb-3">
+    <% for (let i = 0; i < 5; i++) { %>
+    <div class="card col-sm p-1 mr-2 mt-2">
+        <a href="/restaurants/<%= avg[i].id %>"><img src="/randomImage/<%=avg[i].cuisine%>" class="card-img-top" alt="..."></a>
+        <div class="card-body">
+            <a href="/restaurants/<%= avg[i].id %>">
+                <h5 class="card-title"><%= avg[i].name %></h5>
+            </a>
+            <div class="rateit" data-rateit-value="<%= avg[i].avg_score %>" data-rateit-ispreset="true"
+                data-rateit-readonly="true"></div>
+            <p class="card-text align-self-end"><%= avg[i].cuisine %></p>
+        </div>
+    </div>
+    <% } %>
+</div>
+<div class="row">
+    <% for (let i = 5; i < 10; i++) { %>
+    <div class="card col-sm p-1 mr-2">
+        <a href="/restaurants/<%= avg[i].id %>"><img src="/randomImage/<%=avg[i].cuisine%>" class="card-img-top" alt="..."></a>
+        <div class="card-body">
+            <a href="/restaurants/<%= avg[i].id %>">
+                <h5 class="card-title"><%= avg[i].name %></h5>
+            </a>
+            <div class="rateit" data-rateit-value="<%= avg[i].avg_score %>" data-rateit-ispreset="true"
+                data-rateit-readonly="true"></div>
+            <p class="card-text"><%= avg[i].cuisine %></p>
+        </div>
+    </div>
+    <% } %>
+</div>
+
+<h1 class="mt-3">Cuisines</h1>
+<div class="row justify-content-between mb-3">
+    <% for (let i = 0; i < cuisine.length; i++) { %>
+
+    <div class="cuisine col-sm-4 p-1" id="<%= cuisine[i].cuisine %>"
+        style="background-image: url('/randomImage/<%= cuisine[i].cuisine %>')">
+        <a href="/restaurants?cuisine=<%= cuisine[i].cuisine %>" class="cuisineText"><%= cuisine[i].cuisine %></a>
+    </div>
+
+    <% } %>
+</div>
 
 
 <%- include ("partials/footer.ejs") %>

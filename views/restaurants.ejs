@@ -1,0 +1,30 @@
+<%- include ("partials/header.ejs") %>
+
+<h1>Restaurants</h1>
+<table class="table responsive table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Zipcode</th>
+            <th>Street number</th>
+            <th>Borough</th>
+            <th>Cuisine</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% for (let i = 0; i < data.length; i++) { %>
+        <tr id="<%= data[i].id %>">
+            <td><%= data[i].name %></td>
+            <td><%= data[i].address %></td>
+            <td><%= data[i].zipcode %></td>
+            <td><%= data[i].street_number %></td>
+            <td><%= data[i].borough %></td>
+            <td><%= data[i].cuisine %></td>
+        </tr>
+        <% } %>
+    </tbody>
+</table>
+
+
+<%- include ("partials/footer.ejs") %>
