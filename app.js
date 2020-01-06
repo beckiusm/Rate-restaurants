@@ -6,6 +6,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const exjwt = require("express-jwt");
 const cookieParser = require("cookie-parser");
 const flash = require("express-flash");
 const session = require("express-session");
@@ -45,6 +46,13 @@ app.use(cookieParser());
 app.use(express.static('public'));
 app.use("/rating", express.static("node_modules/jquery.rateit/scripts"));
 app.use(favicon(__dirname + "/public/images/star.png"));
+app.use(exjwt({
+    secret: process.env.SECRET,
+    credentialsRequired: false,
+    getToken: function fromHeaderOrQuerystring(req) {
+        return req.cookies.token;
+    }
+}));
 
 /* ACCESS CONTROL */
 
@@ -72,7 +80,7 @@ app.get("/rating", (req, res) => {
 app.get("/randomImage/:cuisine", (req, res) => { // returns random image of cuisine
     let files = fs.readdirSync(path.join(__dirname, "public/images/" + req.params.cuisine));
     let randomImage = files[Math.floor(Math.random() * files.length)];
-    res.sendFile(__dirname+`/public/images/${req.params.cuisine}/${randomImage}`);
+    res.sendFile(__dirname + `/public/images/${req.params.cuisine}/${randomImage}`);
 });
 
 app.get("/", (req, res) => {
@@ -88,22 +96,11 @@ app.get("/", (req, res) => {
 });
 
 app.get("/admin", (req, res) => {
-    jwt.verify(req.cookies.token, process.env.SECRET, (err, decoded) => { // check if token is valid
-        if (decoded) {
-            req.user = decoded.user;
-        } else {
-            req.user = {
-                role: "none"
-            }
-        }
-        let permission = ac.can(req.user.role).createAny("restaurant").granted;
-        if (permission) {
-            res.render("addrestaurant");
-        } else {
-            req.flash("error", "You're not an admin");
-            res.render("addrestaurant")
-        }
-    });
+    if (!req.user || req.user.role !== "admin") {
+        res.send("Not authorized");
+    } else if (req.user.role === "admin") {
+        res.render("addrestaurant");
+    }
 });
 
 app.get("/login", (req, res) => {
@@ -131,17 +128,7 @@ app.get("/hejsan", (req, res) => { // testing
 })
 
 app.get("/restaurants/:id?", (req, res) => {
-    jwt.verify(req.cookies.token, process.env.SECRET, (err, decoded) => { // check if token is valid
-        if (decoded) {
-            req.user = decoded.user;
-        } else {
-            req.user = {
-                role: "none"
-            }
-        }
-    });
-    console.log(req.user);
-    let permission = ac.can(req.user.role).createOwn("review").granted;
+    let user = req.user;
     if (req.query.cuisine) { // cuisine paramter
         db.query("SELECT * FROM restaurants WHERE cuisine = ?", [req.query.cuisine], (err, data) => {
             res.render("restaurants", {
@@ -161,7 +148,7 @@ app.get("/restaurants/:id?", (req, res) => {
                 (select avg(score) from reviews where restaurant_id = ?) as avg_score FROM restaurants r LEFT JOIN reviews rw ON r.id = rw.restaurant_id WHERE r.id = ?`, [req.params.id, req.params.id], (err, restaurant) => {
             res.render("restaurant.ejs", {
                 restaurant,
-                permission
+                user
             });
         });
     }
@@ -223,14 +210,11 @@ app.post("/login", (req, res) => {
             bcrypt.compare(req.body.password, user[0].password, (err, result) => { // compares pw to hashed pw in db
                 if (result) {
                     console.log(user[0]);
-                    jwt.sign({
-                        user: user[0]
-                    }, process.env.SECRET, (err, token) => { // creates token
+                    jwt.sign(user[0], process.env.SECRET, (err, token) => { // creates token
                         if (err) {
                             console.log("error...");
                             console.error(err);
                         } else {
-                            req.user = user;
                             res.cookie("token", token); // token to cookie
                             res.redirect("/");
                         }

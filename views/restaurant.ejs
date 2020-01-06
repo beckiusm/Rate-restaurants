@@ -24,7 +24,7 @@
     <% }} %>
 </div>
 
-<% if (permission) { %> <%- include ("partials/review.ejs") %> <% } else { %>
+<% if (user) { %> <%- include ("partials/review.ejs") %> <% } else { %>
 <a href="/login">Login to write a review</a> <% } %>
 
 <%- include ("partials/footer.ejs") %>
