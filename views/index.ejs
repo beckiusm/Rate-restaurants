@@ -1,10 +1,11 @@
 <%- include ("partials/header.ejs") %>
 
 <h1>Top restaurants</h1>
+
 <div class="row mb-3">
     <% for (let i = 0; i < 5; i++) { %>
     <div class="card col-sm p-1 mr-2 mt-2">
-        <a href="/restaurants/<%= avg[i].id %>"><img src="/randomImage/<%=avg[i].cuisine%>" class="card-img-top" alt="..."></a>
+        <a href="/restaurants/<%= avg[i].id %>"><img src="/api/randomImage/<%=avg[i].cuisine%>" class="card-img-top" alt="..."></a>
         <div class="card-body">
             <a href="/restaurants/<%= avg[i].id %>">
                 <h5 class="card-title"><%= avg[i].name %></h5>
@@ -16,10 +17,11 @@
     </div>
     <% } %>
 </div>
+
 <div class="row">
     <% for (let i = 5; i < 10; i++) { %>
     <div class="card col-sm p-1 mr-2">
-        <a href="/restaurants/<%= avg[i].id %>"><img src="/randomImage/<%=avg[i].cuisine%>" class="card-img-top" alt="..."></a>
+        <a href="/restaurants/<%= avg[i].id %>"><img src="/api/randomImage/<%=avg[i].cuisine%>" class="card-img-top" alt="..."></a>
         <div class="card-body">
             <a href="/restaurants/<%= avg[i].id %>">
                 <h5 class="card-title"><%= avg[i].name %></h5>
@@ -37,7 +39,7 @@
     <% for (let i = 0; i < cuisine.length; i++) { %>
 
     <div class="cuisine col-sm-4 p-1" id="<%= cuisine[i].cuisine %>"
-        style="background-image: url('/randomImage/<%= cuisine[i].cuisine %>')">
+        style="background-image: url('/api/randomImage/<%= cuisine[i].cuisine %>')">
         <a href="/restaurants?cuisine=<%= cuisine[i].cuisine %>" class="cuisineText"><%= cuisine[i].cuisine %></a>
     </div>
 

@@ -29,19 +29,23 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/restaurants">Restaurants</a>
                 </li>
-                <% if (!user || user.role !== "admin") {
-
-                } else {%>
             </ul>
             <ul class="navbar-nav ml-auto">
+                <% if (!user || user.role !== "admin") { %>
+                    <li class="nav-item">
+                        <a id="login" class="nav-link" href="/logout">Logout</a>
+                    </li>
+               <% } else {%>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin">Admin</a>
-                </li>
+                    </li>
                 <li class="nav-item">
                     <a id="login" class="nav-link" href="/logout">Logout</a>
                 </li>
+                <% } %>
+
             </ul>
-            <% } %>
+
         </div>
     </nav>
     <div class="container">

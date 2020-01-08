@@ -1,15 +1,17 @@
 <%- include ("partials/header.ejs") %>
 
+<p>No account? Register <a href="/register">here</a>.</p>
+
 <form action="/login" method="POST">
     <div class="form-group">
         <label for="email">E-mail</label>
-        <input class="form-control" id="email" name="email" placeholder="email" type="email" required>
+        <input class="form-control" id="email" name="email" placeholder="E-mail" type="email" required>
     </div>
     <div class="form-group">
         <label for="email">Password</label>
         <input class="form-control" id="password" name="password" type="password" placeholder="Password" required>
     </div>
-    <button class="btn btn-primary" type="submit">Submit</button>
+    <button class="btn btn-primary mb-3" type="submit">Login</button>
 </form>
 
 <%- include ("partials/error.ejs") %>

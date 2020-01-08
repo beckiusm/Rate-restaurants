@@ -1,0 +1,27 @@
+<%- include ("partials/header.ejs") %>
+
+<h1>Admin panel</h1>
+
+<nav>
+    <div class="nav nav-pills mb-3" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="nav-add-tab" data-toggle="tab" href="#add" role="tab"
+            aria-controls="add" aria-selected="true">Add</a>
+        <a class="nav-item nav-link" id="nav-edit-tab" data-toggle="tab" href="#edit" role="tab" aria-controls="edit"
+            aria-selected="false">Edit</a>
+        <a class="nav-item nav-link" id="nav-delete-tab" data-toggle="tab" href="#delete" role="tab"
+            aria-controls="delete" aria-selected="false">Delete</a>
+    </div>
+</nav>
+<div class="tab-content" id="nav-add">
+    <div class="tab-pane fade show active" id="add" role="tabpanel" aria-labelledby="nav-add-tab">
+        <%- include ("partials/admin/add.ejs") %>
+    </div>
+    <div class="tab-pane fade" id="edit" role="tabpanel" aria-labelledby="nav-edit-tab">
+        <%- include ("partials/admin/edit.ejs") %>
+    </div>
+    <div class="tab-pane fade" id="delete" role="tabpanel" aria-labelledby="nav-delete-tab">
+        <%- include ("partials/admin/delete.ejs") %>
+    </div>
+</div>
+
+<%- include ("partials/footer.ejs") %>

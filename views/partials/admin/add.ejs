@@ -1,9 +1,5 @@
-<%- include ("partials/header.ejs") %>
-
-<h1>Add restaurants</h1>
-
-<form action="/addRestaurant" method="POST">
-    <div class="form-group">
+<form action="/admin/addRestaurant" method="POST">
+    <div class="form-group" id="addForm">
         <label for="name">Name</label>
         <input class="form-control" id="name" name="name" placeholder="Name" required>
     </div>
@@ -52,5 +48,3 @@
     </div>
     <button class="btn btn-primary" type="submit">Submit</button>
 </form>
-
-<%- include ("partials/footer.ejs") %>
