@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const flash = require("express-flash");
 const session = require("express-session");
 const favicon = require("express-favicon");
+const cors = require("cors");
 require('dotenv').config({
     path: __dirname + '/.env'
 });
@@ -48,6 +49,7 @@ app.use(session({
     saveUninitialized: true,
     cookie: {}
 }));
+app.use(cors());
 app.use(flash());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
