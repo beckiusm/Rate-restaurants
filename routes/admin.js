@@ -15,7 +15,6 @@ router.post("/addRestaurant", (req, res) => {
 });
 
 router.post("/editRestaurant", (req, res) => {
-    console.log(req.body);
     request.patch(`http://localhost:3000/api/updateRestaurant/${req.body.id}`).form(req.body);
     res.redirect("/admin");
 });

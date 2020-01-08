@@ -38,15 +38,12 @@ router.get("/logout", (req, res) => {
 
 router.post("/login", (req, res) => {
     db.query(`SELECT * FROM users WHERE email = ?`, [req.body.email], (err, user) => { // checks if email exists in db
-        console.log(user);
         if (!user.length) {
-            console.log("user not found")
             req.flash("error", "Username not found.");
             res.render("login", {user: req.user});
         } else {
             bcrypt.compare(req.body.password, user[0].password, (err, result) => { // compares pw to hashed pw in db
                 if (result) {
-                    console.log(user[0]);
                     jwt.sign(user[0], process.env.SECRET, (err, token) => { // creates token
                         if (err) {
                             console.log("error...");
@@ -72,7 +69,6 @@ router.post("/register", (req, res) => {
     db.query(`SELECT * FROM users WHERE email = ?`, [req.body.email], (err, result) => { // checks if email already exists in db
         if (!result.length) {
             bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
-                console.log(hashedPassword);
                 db.query(`INSERT into users (email, username, password) VALUES (?, ?, ?)`, [req.body.email, req.body.username, hashedPassword], (err, user) => { // adds user to db
                     if (err) throw err;
                     console.log(user);
