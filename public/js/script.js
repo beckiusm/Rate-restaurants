@@ -7,12 +7,6 @@ $(document).on("click", "table td", (event) => { // go to restaurant when clicki
     location.href = "/restaurants/" + id;
 });
 
-if (document.cookie.indexOf("token") === -1) { //
-    console.log("ingen kaka");
-    $("#login").text("Login");
-    $("#login").attr("href", "/login");
-}
-
 $("#nav-edit-tab").click(() => {
     $.getJSON("http://localhost:3000/api/restaurants", (data) => {
         $.each(data, (key, value) => {

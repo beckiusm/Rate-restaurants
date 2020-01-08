@@ -32,17 +32,27 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 <% if (!user || user.role !== "admin") { %>
-                    <li class="nav-item">
-                        <a id="login" class="nav-link" href="/logout">Logout</a>
-                    </li>
-               <% } else {%>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin">Admin</a>
-                    </li>
+                <% if (user) { %>
                 <li class="nav-item">
                     <a id="login" class="nav-link" href="/logout">Logout</a>
                 </li>
-                <% } %>
+                <% } else { %>
+                <li class="nav-item">
+                    <a id="login" class="nav-link" href="/login">Login</a>
+                </li>
+                <% }} else {%>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin">Admin</a>
+                </li>
+                <% if (user) { %>
+                    <li class="nav-item">
+                        <a id="login" class="nav-link" href="/logout">Logout</a>
+                    </li>
+                    <% } else { %>
+                    <li class="nav-item">
+                        <a id="login" class="nav-link" href="/login">Login</a>
+                    </li>
+                <% }} %>
 
             </ul>
 
