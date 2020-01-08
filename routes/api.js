@@ -85,9 +85,10 @@ router.delete("/deleteRestaurant/:id", (req, res) => {
 /* RANDOM IMAGE */
 
 router.get("/randomImage/:cuisine", (req, res) => { // returns random image of cuisine
-    let files = fs.readdirSync(path.join(__parentDir, "public/images/" + req.params.cuisine));
+    let cuisine = req.params.cuisine.toLowerCase();
+    let files = fs.readdirSync(path.join(__parentDir, "public/images/" + cuisine));
     let randomImage = files[Math.floor(Math.random() * files.length)];
-    res.sendFile(__parentDir + `/public/images/${req.params.cuisine}/${randomImage}`);
+    res.sendFile(__parentDir + `/public/images/${cuisine}/${randomImage}`);
 });
 
 module.exports = router;
